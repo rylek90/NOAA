@@ -14,7 +14,7 @@ defmodule Noaa.Service do
   end
 
   def handle_response({:ok, %{status_code: 200, body: body}}), do:
-    {:ok, body}
+    {:ok, Noaa.Parser.parse_response(body)}
 
   def handle_response({_, %{status_code: _, body: body}}), do:
     {:error, body}
