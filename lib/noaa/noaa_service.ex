@@ -1,6 +1,6 @@
 defmodule Noaa.Service do
   @user_agent [ {"user_agent", "Elixir rylek90"}]
-  @noaa_url "http://w1.weather.gov/xml/current_obs/"
+  @noaa_url Application.get_env(:noaa, :noaa_url)
 
   def fetch(code), do:
     code
@@ -8,9 +8,9 @@ defmodule Noaa.Service do
     |> HTTPoison.get(@user_agent)
     |> handle_response
 
-  defp format_url(code) do
-    upper_code = code |> String.capitalize
-    url = "#{@noaa_url}#{upper_code}.xml"
+  def format_url(code) do
+    upper_code = code |> String.upcase
+    "#{@noaa_url}#{upper_code}.xml"
   end
 
   def handle_response({:ok, %{status_code: 200, body: body}}), do:
